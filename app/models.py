@@ -1,7 +1,14 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db
 import datetime
-from . import login_manager
+from flask_sqlalchemy import SQLAlchemy
+from flask.ext.login import UserMixin, LoginManager
+from app import db
+
+
+login_manager = LoginManager()
+
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -10,9 +17,10 @@ def load_user(user_id):
 class User(db.Model):
 	"""docstring for User"""
 	__tablename__ = "users"
+	#__table_args__ = {'extend_existing': True} 
 	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(64), unique= True)
-	email = db.Column(db.String(120), unique = True)
+	username = db.Column(db.String(64))
+	email = db.Column(db.String(120))
 	password=db.Column(db.String(128))
 	joined_at=db.Column(db.DateTime, default=datetime.datetime.now)
 	is_admin=db.Column(db.Boolean, default=False)
@@ -35,10 +43,14 @@ class User(db.Model):
 
 
 class Post(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    body = db.Column(db.String(140))
-    timestamp = db.Column(db.DateTime)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	__tablename__ = "posts"
+	id = db.Column(db.Integer, primary_key = True)
+	body = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime)
+	user_id  = db.Column(db.Integer, db.ForeignKey('users.id'))
+	# user = db.ForeignKey(User)
 
-    def __repr__(self):
-        return '<Post %r>' % (self.body)
+	def __repr__(self):
+		return '<Post %r>' % (self.body)
+
+

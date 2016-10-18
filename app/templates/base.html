@@ -1,7 +1,41 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% if title %}
+    <title> {{ title }}-Suggestion Box</title>
+    {% else %}
+      <title> Suggestion Box</title>
+      {% endif %}
+    <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+
+{% block content %}
+<div class="container">
+
 <ul class="nav navbar-nav navbar-right">
-{% if current_user.is_authenticated() %}
-<li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li>
+{% if current_user.is_authenticated %}
+<li><a href="{{ url_for('logout') }}">Sign Out</a></li>
 {% else %}
-<li><a href="{{ url_for('auth.login') }}">Sign In</a></li>
-{% endif %}
-</ul>
+<li><a href="{{ url_for('login') }}">Sign In</a></li>
+{% endif %}s
+
+</ul> 
+ </div>
+
+  {% endblock %}
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/vendor/what-input.min.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
+
+
+
+
