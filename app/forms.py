@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form 
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, ValidationError 
+from wtforms import StringField, PasswordField, TextField, BooleanField, SubmitField, ValidationError 
 from wtforms.validators import Required, Email, Length, Regexp, EqualTo
 from .models import User
 
@@ -29,6 +29,11 @@ class RegistrationForm(Form):
 	def validate_username(self, field):
 		if User.query.filter_by(username=field.data).first():
 			raise ValidationError('Username already registered')
+
+class PostForm(Form):
+	title = StringField('Title', validators=[Required()])
+	body = TextField('Suggestion', validators=[Required()])
+	submit = SubmitField('Submit')
 
 
 
