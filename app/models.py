@@ -1,5 +1,6 @@
-from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext.login import UserMixin, LoginManager
 from app import db
@@ -14,7 +15,7 @@ login_manager = LoginManager()
 def load_user(user_id):
 	return User.query.get(int(user_id))
 
-class User(db.Model):
+class User(UserMixin, db.Model):
 	"""docstring for User"""
 	__tablename__ = "users"
 	#__table_args__ = {'extend_existing': True} 
@@ -25,10 +26,17 @@ class User(db.Model):
 	joined_at=db.Column(db.DateTime, default=datetime.datetime.now)
 	is_admin=db.Column(db.Boolean, default=False)
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+
+	def __init__(self , username , email,password):
+        self.username = username
+        self.email = email
+        self.password = password
+        self.joined_at = datetime.utcnow()
 		
 
-	def __repr__(self):
-		return '<User %r' %(self.username)
+	# def __repr__(self):
+	# 	return '<User %r' %(self.username)
 
 	@property
 	def password(self):
