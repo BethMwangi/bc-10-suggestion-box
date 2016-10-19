@@ -1,16 +1,18 @@
 from flask import render_template, redirect, request, url_for, flash 
 from app import app, db
-from flask.ext.login import login_required , login_user, logout_user, current_user
+from flask_login import login_required , login_user, logout_user, current_user
 from .models import User, login_manager
 from .forms import LoginForm, RegistrationForm
 
 
-
+@app.route('/secret')
+@login_required
+def secret():
+	return 'Only authenticated users are allowed!'
 
 @app.route('/')
-@login_required
 def index():
-	return 'HI'
+	return "hello"
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -28,27 +30,23 @@ def register():
 	return render_template('register.html', form=form)
 
 
+# import ipdb; ipdb.set_trace()
+
 @app.route('/login', methods =['GET', 'POST'])
 def login():
-	# error = None
-	form = LoginForm(request.form)
-	if request.method == 'POST':
-		if form.validate_on_submit():
-			user = User.query.filter_by(email=request.form['email']).first()
-			if user is not None and user.verify_password(form.password.data):
-				login_user(user, form.remember_me.data)
-			return redirect(request.args.get('next') or url_for('index'))
+	form = LoginForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(email=form.email.data).first()
+		if user is not None and user.verify_password(form.password.data):
+			login_user(user, form.remember_me.data)
+			flash("You've been looged in.Success!")
+			return redirect(url_for('index'))
 		flash('Invalid username or password.')
-	return render_template('login.html', form=form)
+	return render_template('login.html', form=form, current_user=current_user)
 
 @app.route('/logout')
 @login_required
 def logout():
 	logout_user()
 	flash('You have been logged out.')
-	return redirect(url_for('index'))
-
-
-
-
-
+	return redirect(url_for('welcome'))
