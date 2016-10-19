@@ -4,16 +4,13 @@ from flask.ext.login import login_required , login_user, logout_user, current_us
 from .models import User, login_manager
 from .forms import LoginForm, RegistrationForm
 
-@login_manager.user_loader
-def load_user(user_id):
-	return User.query.get(int(user_id))
 
 
 
-# @auth.route('/secret')
-# @login_required
-# def secret():
-# 	return 'Only authenticated users are allowed!'
+@app.route('/')
+@login_required
+def index():
+	return 'HI'
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -31,8 +28,8 @@ def register():
 	return render_template('register.html', form=form)
 
 
-@app.route('/', methods =['GET', 'POST'])
-def index():
+@app.route('/login', methods =['GET', 'POST'])
+def login():
 	# error = None
 	form = LoginForm(request.form)
 	if request.method == 'POST':
@@ -40,7 +37,7 @@ def index():
 			user = User.query.filter_by(email=request.form['email']).first()
 			if user is not None and user.verify_password(form.password.data):
 				login_user(user, form.remember_me.data)
-			return redirect(request.args.get('next') or url_for('welcome'))
+			return redirect(request.args.get('next') or url_for('index'))
 		flash('Invalid username or password.')
 	return render_template('login.html', form=form)
 
@@ -49,7 +46,7 @@ def index():
 def logout():
 	logout_user()
 	flash('You have been logged out.')
-	return redirect(url_for('welcome'))
+	return redirect(url_for('index'))
 
 
 
