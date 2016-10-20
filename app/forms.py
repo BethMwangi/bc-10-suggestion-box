@@ -48,7 +48,7 @@ class VoteForm(Form):
 	votes = StringField('votes')
 
 class CommentForm(Form):
-	body = StringField('Suggestion', validators=[Required()])
+	body = StringField('comment', validators=[Required()])
 	submit = SubmitField('Submit')
 
 

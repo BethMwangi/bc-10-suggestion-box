@@ -3,7 +3,7 @@ from app import app, db
 from flask_login import login_required , login_user, logout_user, current_user
 from .models import User, Post, login_manager
 from .forms import LoginForm, RegistrationForm, PostForm, EditProfileForm, CommentForm, VoteForm
-
+from datetime import datetime
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -20,6 +20,14 @@ def register():
 
 
 
+# @app.before_request
+# def before_request():
+#     g.user = current_user
+#     if g.user.is_authenticated:
+#         g.user.last_seen = datetime.utcnow()
+#         db.session.add(g.user)
+#         db.session.commit()
+
 @app.route('/user')
 @login_required
 def user():
@@ -28,7 +36,7 @@ def user():
 
 @app.route('/current_user')
 @login_required
-def current_user():
+def curre_user():
 	return render_template('user.html')
 
 
@@ -93,14 +101,15 @@ def post():
 		return redirect(url_for('welcome'))
 	return render_template('post.html', form = form)
 
-# @app.route('/post_comment', methods=['GET','POST'])
+
+# @app.route('/post_comment/<id>', methods=['GET','POST'])
+# @login_required
 # def post_comment(id):
 # 	post_comment= Post.query.get_or_404(id)
 # 	form = CommentForm()
 # 	if form.validate_on_submit():
 # 		comment = Comment(
 # 	    	body = form.body.data,
-# 	    	post = post,
 # 	    	author = current_user._get_current_object())
 # 		db.session.add(comment)
 # 		db.session.commit()

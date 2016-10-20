@@ -24,7 +24,7 @@ class User(UserMixin, db.Model):
 	member_since = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
-	comments = db.relationship('Comment', backref='author', lazy='dynamic')
+	# comments = db.relationship('Comment', backref='author', lazy='dynamic')
 		
 
 	def __repr__(self):
@@ -56,7 +56,7 @@ class Post(db.Model):
 	timestamp = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	user_id  = db.Column(db.Integer, db.ForeignKey('users.id'))
 	votes = db.Column(db.Integer, default=0)
-	comments = db.relationship('Comment', backref='author', lazy='dynamic')
+	# comments = db.relationship('Comment', backref='author', lazy='dynamic')
 
 	def __repr__(self):
 		return '<Post %r>' % (self.body)
@@ -74,8 +74,8 @@ class Comment(db.Model):
 	body = db.Column(db.String(64))
 	body_html = db.Column(db.String(120))
 	timestamp=db.Column(db.DateTime, index=True, default=datetime.datetime.now)
-	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+	# author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	# post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
 	@staticmethod
 	def on_changed_body(target, vale, oldvale, initiator):
@@ -88,9 +88,9 @@ class Comment(db.Model):
 		return Post.query.order_by(Post.timestamp.desc())
 
 
-db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+# db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
-# class Votes(db.Model):
-# 	__tablename__ = "votes"
-# 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
-# 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+class Votes(db.Model):
+	__tablename__ = "votes"
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
