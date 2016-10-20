@@ -1,26 +1,64 @@
+
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Login{% endblock %}
 
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../static/foundation.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/app.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+
+  </head>
+
+
+  <body> 
+
+    <body class="align">
+     <div class="site__container">
+
+    <div class="grid__container">
+       
 {% block page_content %}
+
+<div class="container">
 
 <div class="page-header">
 
 <h1>Login</h1>
 
+
 </div>
+  <div action="" method="post" class="form form--login">
 
 <div class="col-md-4">
 {{ wtf.quick_form(form) }}
 
 </div>
 
-<p>
-New user?
-<a href="{{ url_for('register') }}">
-Click here to register
-</a>
-</p>
+</div>
+{% if error %}
+<p class="error"><strong>Error:</strong> {{ error }}</p>
+{% endif %}
+</div>
+ <p class="text--center">Not a member? <a href="{{ url_for('register') }}"> Click here to Sign Up <span class="fontawesome-arrow-right"></span></p>
+ </div>
 
+  </div>
+</body>
 {% endblock %}
+
+
+
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/vendor/what-input.min.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
+

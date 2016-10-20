@@ -1,18 +1,40 @@
-
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Home_Shareble Page {% endblock %}
 
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
 {% block page_content %}
 
    {% for post in posts %}
-  <table>
-      <tr valign="top">
-          <td><img src="{{ post.author.avatar(50) }}"></td><td><i>{{ post.author.username }} </i><br>{{ post.title }}
-          <br>{{ post.body }}</td>
-      </tr>
-  </table>
+
+<div class="row">
+<div class=col-md-1 " style="">
+        <img src="{{ post.author.avatar(80) }}">
+         
+ </div>
+ <div class="col-md-10" style=""> <p a href="{{url_for('current_user')}}"><i>{{ post.author.username }} </i></p>
+          <p>{{ post.title }}</p>
+          <p>{{ post.body }}</p>
+          </div>
+          <button type="button" class="btn btn-primary" href="{{ url_for('edit_profile') }}">Comment</button>
+ </div>
+ <div class="row">
+
+ <div class="col-md-12">
+
+ {% if post.comments %}
+    {% if post.comments.count() > 0 %}
+    <h2>Comments</h2>
+     <p> {% for comment in post.comments %}
+    <p>{{ comment.body }}</p>
+      {% endfor %} </p>
+                {% endif %}
+                {% endif %}
+ </div>
 
   {% endfor %}
   {% endblock %}

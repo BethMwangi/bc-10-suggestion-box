@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash, g
 from app import app, db
 from flask_login import login_required , login_user, logout_user, current_user
 from .models import User, Post, login_manager
-from .forms import LoginForm, RegistrationForm, PostForm, EditProfileForm
+from .forms import LoginForm, RegistrationForm, PostForm, EditProfileForm, CommentForm, VoteForm
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -24,6 +24,14 @@ def register():
 @login_required
 def user():
 	return render_template('user.html')
+
+
+@app.route('/current_user')
+@login_required
+def current_user():
+	return render_template('user.html')
+
+
 
 @app.route('/welcome')
 @login_required
@@ -51,6 +59,7 @@ def edit_profile():
 
  
 @app.route('/', methods =['GET', 'POST'])
+@login_required
 def index():
 	form = LoginForm()
 	if form.validate_on_submit():
@@ -75,7 +84,6 @@ def logout():
 @login_required
 def post():
 	form = PostForm()
-	
 	if form.validate_on_submit():
 		post = Post(title=form.title.data, 
 	    	body = form.body.data,
@@ -85,4 +93,18 @@ def post():
 		flash('Post successfully created')
 		return redirect(url_for('welcome'))
 	return render_template('post.html', form = form)
-	
+
+@app.route('/post_comment', methods=['GET','POST'])
+def post_comment(id):
+	post_comment= Post.query.get_or_404(id)
+	form = CommentForm()
+	if form.validate_on_submit():
+		comment = Comment(
+	    	body = form.body.data,
+	    	post = post,
+	    	author = current_user._get_current_object())
+		db.session.add(comment)
+		db.session.commit()
+		return redirect(url_for('welcome', id =post.id))
+	return render_template('post.html',posts=[post], form = form)
+

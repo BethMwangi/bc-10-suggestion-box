@@ -2,6 +2,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, TextAreaField, BooleanField, SubmitField, ValidationError 
 from wtforms.validators import Required, Email, Length, Regexp, EqualTo
 from .models import User
+from flask.ext.pagedown.fields import PageDownField
 
 class LoginForm(Form):
 	email = StringField('Email', validators=[Required(),
@@ -39,13 +40,16 @@ class EditProfileForm(Form):
 
 class PostForm(Form):
 	title = StringField('Title', validators=[Required()])
-	body = TextAreaField('Suggestion', validators=[Required()])
+	body = PageDownField('Suggestion', validators=[Required()])
 	submit = SubmitField('Submit')
 
 class VoteForm(Form):
 	post_id = StringField('post_id')
 	votes = StringField('votes')
 
+class CommentForm(Form):
+	body = StringField('Suggestion', validators=[Required()])
+	submit = SubmitField('Submit')
 
 
 

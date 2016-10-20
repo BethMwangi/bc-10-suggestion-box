@@ -24,6 +24,7 @@ class User(UserMixin, db.Model):
 	member_since = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
+	comments = db.relationship('Comment', backref='author', lazy='dynamic')
 		
 
 	def __repr__(self):
@@ -55,20 +56,39 @@ class Post(db.Model):
 	timestamp = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	user_id  = db.Column(db.Integer, db.ForeignKey('users.id'))
 	votes = db.Column(db.Integer, default=0)
+	comments = db.relationship('Comment', backref='author', lazy='dynamic')
+
+	def __repr__(self):
+		return '<Post %r>' % (self.body)
 	
-
-
 
 	def total_vote(self, post_id, votes):
 		db.session.query(Post).filter_by(id = post_id).update({"votes": votes})
 		db.session.commit()
-
-	
 	
 
-	def __repr__(self):
-		return '<Post %r>' % (self.body)
+class Comment(db.Model):
+	"""docstring for Comments"""
+	__tablename__ = "comments"
+	id = db.Column(db.Integer, primary_key=True)
+	body = db.Column(db.String(64))
+	body_html = db.Column(db.String(120))
+	timestamp=db.Column(db.DateTime, index=True, default=datetime.datetime.now)
+	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
+	@staticmethod
+	def on_changed_body(target, vale, oldvale, initiator):
+		allowed_tags =['a', 'abbr', 'acronym', 'b', 'code', 'em','strong']
+		target.body.html = bleach.linkify(bleach.clean(
+		markdown(value, output_format='html'),
+		tags = allowed_tags, strip=True))
+
+	def blog_posts(self):
+		return Post.query.order_by(Post.timestamp.desc())
+
+
+db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
 # class Votes(db.Model):
 # 	__tablename__ = "votes"
