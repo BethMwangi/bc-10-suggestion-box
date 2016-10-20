@@ -54,16 +54,15 @@ class Post(db.Model):
 	body = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	user_id  = db.Column(db.Integer, db.ForeignKey('users.id'))
-	# upvotes = db.Column(db.Integer, default=0)
-	# downvotes = db.Column(db.Integer, default =0)
+	votes = db.Column(db.Integer, default=0)
+	
 
 
 
-	# def vote_up(self):
-	# 	self.upvotes += 1
-		
-	# 	db.session.add(self.upvotes)
-	# 	db.session.commit()
+	def total_vote(self, post_id, votes):
+		db.session.query(Post).filter_by(id = post_id).update({"votes": votes})
+		db.session.commit()
+
 	
 	
 
@@ -71,7 +70,7 @@ class Post(db.Model):
 		return '<Post %r>' % (self.body)
 
 
-class Votes(db.Model):
-	__tablename__ = "votes"
-	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
-	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+# class Votes(db.Model):
+# 	__tablename__ = "votes"
+# 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+# 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)

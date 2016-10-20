@@ -42,6 +42,11 @@ class PostForm(Form):
 	body = TextAreaField('Suggestion', validators=[Required()])
 	submit = SubmitField('Submit')
 
+class VoteForm(Form):
+	post_id = StringField('post_id')
+	votes = StringField('votes')
+
+
 
 
 
