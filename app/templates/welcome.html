@@ -1,0 +1,18 @@
+
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Home_Shareble Page {% endblock %}
+
+{% block page_content %}
+
+   {% for post in posts %}
+  <table>
+      <tr valign="top">
+          <td><img src="{{ post.author.avatar(50) }}"></td><td><i>{{ post.author.username }} </i><br>{{ post.title }}
+          <br>{{ post.body }}</td>
+      </tr>
+  </table>
+
+  {% endfor %}
+  {% endblock %}

@@ -21,16 +21,29 @@
       </tr>
   </table>
   <hr>
+  <ul class="posts">
   {% for post in posts %}
-  <table>
-      <tr valign="top">
-          <td><img src="{{ post.current_user.avatar(50) }}"></td><td><i>{{ post.current_user.username }} </i><br>{{ post.title }}
-          <br>{{ post.body }}</td>
-      </tr>
-  </table>
+  <li class="post">
+  <div class="profile_thumbnail">
+  <a href="{{ url_for ('.user' , username = post.author.username) }}">
+         <img class="img-rounded profile-thumbnail"
+src="{{ post.author.gravatar(size=40) }}">
+</a>
+</div>
+<div class="post-author">
+<a href="{{ url_for('.user', username=post.author.username) }}">
+{{ post.author.username }}
+</a>
+</div>
+<div class="post-body">{{ post.title }}</div>
+<div class="post-body">{{ post.body }}</div>
+</li>
+{% endfor %}
+</ul>
 
-  {% endfor %}
+ 
 
+</ul>
 <a class="btn btn-default" href="{{ url_for('edit_profile') }}">
 Edit Profile
 </a>

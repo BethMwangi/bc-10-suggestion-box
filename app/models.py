@@ -54,7 +54,24 @@ class Post(db.Model):
 	body = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	user_id  = db.Column(db.Integer, db.ForeignKey('users.id'))
-	# user = db.ForeignKey(User)
+	# upvotes = db.Column(db.Integer, default=0)
+	# downvotes = db.Column(db.Integer, default =0)
+
+
+
+	# def vote_up(self):
+	# 	self.upvotes += 1
+		
+	# 	db.session.add(self.upvotes)
+	# 	db.session.commit()
+	
+	
 
 	def __repr__(self):
 		return '<Post %r>' % (self.body)
+
+
+class Votes(db.Model):
+	__tablename__ = "votes"
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)

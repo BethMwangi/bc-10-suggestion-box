@@ -26,6 +26,13 @@ def register():
 def user():
 	return render_template('user.html')
 
+@app.route('/welcome')
+@login_required
+def welcome():
+	posts = Post.query.order_by(Post.timestamp.desc()).all()
+	return render_template('welcome.html', posts=posts, current_user = current_user.username)
+
+
 @app.route('/edit-profile',methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -69,47 +76,14 @@ def logout():
 @login_required
 def post():
 	form = PostForm()
+	
 	if form.validate_on_submit():
 		post = Post(title=form.title.data, 
-	    	body = form.data.body,
+	    	body = form.body.data,
 	    	author = current_user._get_current_object())
 		db.session.add(post)
+		db.session.commit()
 		flash('Post successfully created')
 		return redirect(url_for('welcome'))
-	posts = Post.query.order_by(Post.timestamp.desc()).all()
-	return render_template('post.html', form = form, posts=posts)
+	return render_template('post.html', form = form)
 	
-
-
-
-		
-
-
-# post streams
-
-# @app.route('/stream')
-# @app.route('/stream/<username>')
-# def stream():
-# 	template = 'stream.html'
-# 	if username and username != current_user.username:
-# 		user = Post.query.filter_by(username=form.username.data).all()
-# 		stream = Post.user.query.all()
-# 	else:
-# 		stream = 
-# 	return render_template('stream.html', stream=stream)
-
-# @app.route('/user/<username>')
-# @login_required
-# def user(username):
-# 	user = User.query.filter_by(username=username).first()
-# 	if user is None:
-# 		abort(404)
-# 	return render_template('user.html', user=user, posts=posts)
-
-
-
-
-
-
-
-
