@@ -5,13 +5,6 @@ from .models import User, Post, login_manager
 from .forms import LoginForm, RegistrationForm, PostForm
 
 
-# @app.route('/secret')
-# @login_required
-# def secret():
-# 	return 'Only authenticated users are allowed!'
-
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	form = RegistrationForm()
@@ -27,11 +20,16 @@ def register():
 	return render_template('register.html', form=form)
 
 
-# import ipdb; ipdb.set_trace()
+
 @app.route('/user')
 @login_required
 def user():
 	return render_template('user.html')
+
+# @app.route('/welcome')
+# @login_required
+# def user():
+# 	return render_template('user.html')
 
  
 @app.route('/', methods =['GET', 'POST'])
@@ -53,7 +51,9 @@ def logout():
 	flash('You have been logged out.')
 	return redirect(url_for('index'))
 
-@app.route('/new_post', methods=('GET','POST'))
+#creating a Post route	
+
+@app.route('/post', methods=('GET','POST'))
 @login_required
 def post():
 	form = PostForm()
@@ -64,5 +64,34 @@ def post():
 		db.session.commit()
 		flash('Post successfuly created')
 		return redirect(url_for('index'))
-	return render_template('post.html', form=form)
+	return render_template('post.html', form=form, post=post)
+
+
+# post streams
+
+# @app.route('/stream')
+# @app.route('/stream/<username>')
+# def stream():
+# 	template = 'stream.html'
+# 	if username and username != current_user.username:
+# 		user = Post.query.filter_by(username=form.username.data).all()
+# 		stream = Post.user.query.all()
+# 	else:
+# 		stream = 
+# 	return render_template('stream.html', stream=stream)
+
+# @app.route('/user/<username>')
+# @login_required
+# def user(username):
+# 	user = User.query.filter_by(username=username).first()
+# 	if user is None:
+# 		abort(404)
+# 	return render_template('user.html', user=user, posts=posts)
+
+
+
+
+
+
+
 

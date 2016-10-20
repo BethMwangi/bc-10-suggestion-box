@@ -10,6 +10,12 @@
 <div class="col-md-4">
 {{ wtf.quick_form(form) }}
 
+
+{% for post in posts %}
+	<h4>{{ post.title }}</h4>
+	<p>{{ post.body }}</p>
+	{{ post.timestamp }}
+{% endfor %}
 </div>
 
 {% endblock %}
