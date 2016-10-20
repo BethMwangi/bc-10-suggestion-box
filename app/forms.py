@@ -30,6 +30,13 @@ class RegistrationForm(Form):
 		if User.query.filter_by(username=field.data).first():
 			raise ValidationError('Username already registered')
 
+
+class EditProfileForm(Form):
+	username = StringField('Real name', validators=[Length(0, 64)])
+	gender = StringField('Gender', validators=[Length(0, 64)])
+	about_me = TextAreaField('About me')
+	submit = SubmitField('Submit')
+
 class PostForm(Form):
 	title = StringField('Title', validators=[Required()])
 	body = TextAreaField('Suggestion', validators=[Required()])

@@ -19,8 +19,8 @@ class User(UserMixin, db.Model):
 	password_hash = db.Column(db.String(128))
 	joined_at=db.Column(db.DateTime, default=datetime.datetime.now)
 	is_admin=db.Column(db.Boolean, default=False)
-	location = db.Column(db.String(64))
 	about_me = db.Column(db.Text())
+	gender = db.Column(db.String(64))
 	member_since = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
@@ -52,7 +52,7 @@ class Post(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	title = db.Column(db.String(64))
 	body = db.Column(db.String(140))
-	timestamp = db.Column(db.DateTime)
+	timestamp = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 	user_id  = db.Column(db.Integer, db.ForeignKey('users.id'))
 	# user = db.ForeignKey(User)
 
