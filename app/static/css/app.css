@@ -126,6 +126,15 @@ input {
   width: 1px;
 }
 
+
+/*welcome page*/
+
+.item {
+height: 300px;
+width: 80%
+background-color:grey;
+color: blue
+}
 .text--center {
   text-align: center;
 }
@@ -133,5 +142,12 @@ input {
 .grid__container {
   margin: 0 auto;
   max-width: 20rem;
-  width: 90%;
+  width: 20%;
+}
+.cont-body{
+
+  margin-left: 5%;
+  background-color: whitesmoke;
+  padding-left: 1%;
+
 }

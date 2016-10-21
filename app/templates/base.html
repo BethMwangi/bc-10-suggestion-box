@@ -1,21 +1,23 @@
 {% block title %}Suggestion Box{% endblock %}
 
-<link rel="stylesheet" type="text/css" href="../static/css/app.css">
-{% block navbar %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
+<script src="{{ url_for('static', filename='js/vendor/jquery.js') }}"></script>
+{% endblock %}
 
+{% block navbar %}
 <nav class="navbar navbar-inverse" role="navigation">
 <ul class="nav navbar-inverse " >
 {% if current_user.is_authenticated %}
-
-
 <li><a href="{{ url_for('index') }}">Sign In</a></li>
-
-
 {% else %}
 <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
 {% endif %}
 </ul></nav>
 {% endblock %}
+
 {% block content %}
 <div class="container">
 {% block page_content %}{% if current_user.is_authenticated() %}
@@ -24,6 +26,7 @@
 Profile
 </a>
 </li>
-{% endif %}{% endblock %}
+{% endif %}
+{% endblock %}
 </div>
 {% endblock %}

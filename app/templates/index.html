@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Login{% endblock %}
+
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -10,9 +10,9 @@
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="../static/foundation.min.css">
+  <!--   <link rel="stylesheet" type="text/css" href="../static/foundation.min.css">
     <link rel="stylesheet" type="text/css" href="../static/css/app.css">
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'> -->
 
   </head>
 
@@ -36,10 +36,16 @@
 </div>
   <div action="" method="post" class="form form--login">
 
-<div class="col-md-4">
+        <div class="form__field">
+
+<!-- <div class="col-md-4"> -->
 {{ wtf.quick_form(form) }}
 
-</div>
+
+
+
+
+<!-- </div> -->
 
 </div>
 {% if error %}

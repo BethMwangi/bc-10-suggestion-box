@@ -1,29 +1,83 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
+<script src="{{ url_for('static', filename='js/vendor/jquery.js') }}"></script>
+{% endblock %}
 
-{% block title %}Home_Shareble Page {% endblock %}
+{% block title %}Home Page {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 {{ pagedown.include_pagedown() }}
 {% endblock %}
 {% block page_content %}
-
    {% for post in posts %}
 
 <div class="row">
-<div class=col-md-1 " style="">
-        <img src="{{ post.author.avatar(80) }}">
-         
- </div>
- <div class="col-md-10" style=""> <p a href="{{url_for('curre_user')}}"><i>{{ post.author.username }} </i></p>
-          <p>{{ post.title }}</p>
-          <p>{{ post.body }}</p>
-          </div>
-          <div class="col-md-1">
-{{ wtf.quick_form(form) }}
-          <button type="button" class="btn btn-primary" href="{{ url_for('edit_profile') }}">Comment</button>
- </div>
+<div class="small-2 large-2 columns ">
+        <img src="{{ post.author.avatar(80) }}">       
+</div>
+<script type="text/javascript">
+  function vote(votes, post_id){
+    $.ajax({
+            url: '/vote',
+            data: {'votes':votes,'post_id':post_id},
+            type: 'POST',
+            dataType:'json',
+            success: function(data, textStatus, jqXHR) {
+                str = '#vote'+post_id
+                window.location.reload()
+                $(str).html(data['votes'])
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+  }  
+</script>
+
+</script>
+
+
+<div class="small-2 large-2 columns">
+  <div class="row">
+  <button>
+    <i class="fa fa-caret-square-o-up" onclick="vote('{{post.votes+1}}','{{post.id}}')"  aria-hidden="true" data-id='{{post.id}}' data-votes="{{post.votes+1}}"></i>
+  </button>
+  </div>
+  <div class="row" id='vote{{post.id}}'>
+    {{ post.votes }}
+  </div>
+  <div class="row">
+    <button>
+      <i class="fa fa-caret-square-o-down" onclick="vote('{{post.votes-1}}','{{post.id}}')" aria-hidden="true" data-id='{{post.id}}' data-votes="{{post.votes-1}}"></i>
+    </button>
+  </div>
+</div>
+
+<div class="small-8 large-8 columns" style=""> 
+<div class="row">
+<div class="large-12">
+  <p a href="{{url_for('curre_user')}}"><i>{{ post.author.username }}</i></p>
+</div>
+</div>
+<div class="row">
+<div class="large-12">
+  <p>{{ post.title }}</p>
+</div>
+</div>
+<div class="row">
+<div class="large-12">
+  <p>{{ post.body }}</p>
+</div>
+</div>  
+<div class="row">
+<div class="large-12">
+  <button type="button" class="btn btn-primary" href="{{ url_for('stream') }}">Comment</button>
+</div>
+</div>  
  <div class="row">
 
  <div class="col-md-12">
@@ -37,6 +91,8 @@
                 {% endif %}
                 {% endif %}
  </div>
-
-  {% endfor %}
+</div>
+</div>
+</div>
+ {% endfor %}
   {% endblock %}

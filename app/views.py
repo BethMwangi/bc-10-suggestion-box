@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash, g
+from flask import render_template, redirect, request, url_for, flash, g, json
 from app import app, db
 from flask_login import login_required , login_user, logout_user, current_user
 from .models import User, Post, login_manager
@@ -33,6 +33,22 @@ def register():
 def user():
 	return render_template('user.html')
 
+@app.route('/vote', methods=['POST'])
+@login_required
+def vote():
+	votes = request.form['votes']
+	post_id = request.form['post_id']
+	update = db.session.query(Post).filter_by(id=int(post_id)).update({'votes':int(votes)})
+	db.session.commit()
+	get_votes = db.session.query(Post).filter_by(id=int(post_id)).one()
+	print(get_votes.votes)
+	votes = get_votes.votes
+	return json.dumps({'status':'OK','votes':votes, 'id':post_id})
+
+@app.route('/stream')
+@login_required
+def stream():
+	return render_template('welcome.html')
 
 @app.route('/current_user')
 @login_required
@@ -102,17 +118,19 @@ def post():
 	return render_template('post.html', form = form)
 
 
-# @app.route('/post_comment/<id>', methods=['GET','POST'])
-# @login_required
-# def post_comment(id):
-# 	post_comment= Post.query.get_or_404(id)
-# 	form = CommentForm()
-# 	if form.validate_on_submit():
-# 		comment = Comment(
-# 	    	body = form.body.data,
-# 	    	author = current_user._get_current_object())
-# 		db.session.add(comment)
-# 		db.session.commit()
-# 		return redirect(url_for('welcome', id =post.id))
-# 	return render_template('post.html',posts=[post], form = form)
+@app.route('/post_comment', methods=['GET','POST'])
+@login_required
+def post_comment():
+	post_comment= Post.query.get_or_404(id)
+	form = CommentForm()
+	if form.validate_on_submit():
+		comment = Comment(
+	    	body = form.body.data,
+	    	author = current_user._get_current_object())
+		db.session.add(comment)
+		db.session.commit()
+		return redirect(url_for('welcome', id =post.id))
+	return render_template('post.html',posts=[post], form = form)
+
+
 

@@ -1,25 +1,21 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Welcome User{% endblock %}
+{% block title %}Edit{% endblock %}
 
 {% block page_content %}
 
+<div class="page-header">
 
-{% for post in stream %}
-<article>
-	<h2>
-		<a href="{{ url_for('stream', username=post.user.username) }}">{{ post.user.username }}
+<h2>Comment Box</h2>
 
-	</h2>
-	<i class="clock"></i><time date-time="{{ post.timestamp }}"> class="distime" datetime="{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S')}}"{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</time>
-	<a href="#" class="view">View</a>
-	<div class="post">
-	{{ post.content }}
-	</div>
-</article>
-{% endfor %}
-<p> 
-<a href="{{ url_for('post') }}">Create a Post</a></p>
+</div>
+
+<div class="col-md-4">
+{{ wtf.quick_form(form) }}
+
+</div>
+
+
 
 {% endblock %}
