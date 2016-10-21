@@ -73,12 +73,13 @@ def edit_profile():
 		current_user.about_me = form.about_me.data
 		current_user.gender = form.gender.data
 		db.session.add(current_user)
+		db.session.commit()
 		flash('Your profle has been submitted')
 		return redirect(url_for('user', username = current_user.username))
 	form.username.data = current_user.username
 	form.about_me.data = current_user.about_me
 	form.gender.data = current_user.gender
-	return render_template('edit_profile.html', form=form)
+	return render_template('edit_profile.html', about_me = current_user.about_me, form=form)
 		
 
  
